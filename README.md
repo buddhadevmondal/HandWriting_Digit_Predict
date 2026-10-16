@@ -102,9 +102,9 @@ http://127.0.0.1:8000/docs
 
 ## Author
 
-**Buddhadev Mondal**
+**Budhadev Mondal**
 
-GitHub: [buddhadevmondal](https://github.com/buddhadevmondal)
+GitHub:https://github.com/buddhadevmondal
 
 ## License
 
