@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>DigitVision AI | Handwritten Digit Recognition</title>
+
+    <meta name="description"
+          content="Recognize handwritten digits using a deep learning CNN model.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <a class="skip" href="#recognize">Skip to recognizer</a>
+
+    <!-- Decorative background -->
+    <div class="bg" aria-hidden="true">
+        <span class="d d1">7</span>
+        <span class="d d2">3</span>
+        <span class="d d3">9</span>
+        <span class="d d4">0</span>
+        <span class="d d5">4</span>
+        <span class="d d6">2</span>
+        <span class="d d7">8</span>
+        <span class="d d8">5</span>
+        <span class="d d9">1</span>
+        <span class="d d10">6</span>
+    </div>
+
+    <!-- Hero section -->
+    <header class="hero">
+
+        <p class="badge">
+            <span class="dot"></span>
+            AI POWERED · CNN DIGIT RECOGNITION
+        </p>
+
+        <h1>
+            Every Stroke<br>
+            Tells a Number
+        </h1>
+
+        <p class="sub">
+            Transform handwritten digits into intelligent predictions.
+            Upload a digit image and let your deep learning model
+            recognize the number from 0 to 9.
+        </p>
+
+        <a class="btn ghost" href="#recognize">
+            Try it now &darr;
+        </a>
+
+    </header>
+
+    <main>
+
+        <!-- Main workspace -->
+        <section class="workspace"
+                 id="recognize"
+                 aria-labelledby="up-title">
+
+            <!-- Upload card -->
+            <article class="card upload-card">
+
+                <h2 id="up-title">Upload your digit</h2>
+
+                <p class="hint">
+                    Select a clear image of one handwritten digit.
+                    PNG, JPG, JPEG, WEBP or BMP · Maximum 8 MB.
+                </p>
+
+                <div class="drop"
+                     id="dropzone"
+                     tabindex="0"
+                     role="button"
+                     aria-label="Drop an image here or press Enter to browse">
+
+                    <div class="drop-empty" id="dropEmpty">
+
+                        <svg viewBox="0 0 48 48"
+                             width="52"
+                             height="52"
+                             aria-hidden="true">
+
+                            <rect x="6" y="6"
+                                  width="36" height="36"
+                                  rx="8"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2.5"
+                                  stroke-dasharray="4 4"/>
+
+                            <path d="M24 33V17m0 0-7 7m7-7 7 7"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+
+                        <p class="drop-title">
+                            Drag &amp; drop your image
+                        </p>
+
+                        <p class="hint">or browse your computer</p>
+
+                        <button type="button"
+                                class="btn secondary"
+                                id="browseBtn">
+                            Browse files
+                        </button>
+
+                    </div>
+
+                    <!-- Image preview -->
+                    <div class="preview" id="preview" hidden>
+                        <img id="previewImg"
+                             alt="Preview of selected handwritten digit">
+                    </div>
+
+                </div>
+
+                <input type="file"
+                       id="fileInput"
+                       accept=".png,.jpg,.jpeg,.webp,.bmp,image/png,image/jpeg,image/webp,image/bmp"
+                       hidden>
+
+                <p class="file-meta" id="fileMeta" hidden></p>
+
+                <div class="error"
+                     id="error"
+                     role="alert"
+                     hidden></div>
+
+                <div class="actions">
+
+                    <button type="button"
+                            class="btn primary"
+                            id="predictBtn"
+                            disabled>
+
+                        <span class="spinner" aria-hidden="true"></span>
+
+                        <span id="predictLabel">
+                            Recognize Digit
+                        </span>
+                    </button>
+
+                    <button type="button"
+                            class="btn text"
+                            id="changeBtn"
+                            hidden>
+                        Change image
+                    </button>
+
+                    <button type="button"
+                            class="btn text danger"
+                            id="removeBtn"
+                            hidden>
+                        Remove
+                    </button>
+
+                </div>
+
+            </article>
+
+            <!-- Prediction card -->
+            <article class="card result-card"
+                     aria-live="polite"
+                     aria-labelledby="res-title">
+
+                <h2 id="res-title">AI prediction</h2>
+
+                <p class="hint">
+                    Your model's prediction will appear here.
+                </p>
+
+                <!-- Initial state -->
+                <div class="state idle" id="stateIdle">
+
+                    <div class="placeholder-digit" aria-hidden="true">
+                        ?
+                    </div>
+
+                    <p class="hint">
+                        Upload a handwritten digit and click
+                        <strong>Recognize Digit</strong> to see the result.
+                    </p>
+
+                </div>
+
+                <!-- Loading state -->
+                <div class="state loading" id="stateLoading" hidden>
+
+                    <div class="scan" aria-hidden="true">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </div>
+
+                    <h3>Analyzing your digit...</h3>
+
+                    <p class="hint">
+                        Your neural network is processing the image.
+                    </p>
+
+                </div>
+
+                <!-- Prediction result -->
+                <div class="state done" id="stateDone" hidden>
+
+                    <div class="big-row">
+
+                        <div class="big-digit" id="bigDigit">–</div>
+
+                        <div class="conf">
+
+                            <span class="conf-num" id="confNum">
+                                0%
+                            </span>
+
+                            <span class="hint">
+                                Model confidence
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <h3>Top 3 predictions</h3>
+
+                    <ul class="bars" id="bars"></ul>
+
+                    <p class="note" id="note" hidden></p>
+
+                    <button type="button"
+                            class="btn secondary"
+                            id="resetBtn">
+                        Try another digit
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- How it works -->
+        <section class="how" aria-labelledby="how-title">
+
+            <h2 id="how-title">How it works</h2>
+
+            <p class="hint">
+                From image upload to intelligent prediction in three steps.
+            </p>
+
+            <ol class="steps">
+
+                <li class="card step">
+
+                    <span class="num">1</span>
+
+                    <h3>Upload image</h3>
+
+                    <p>
+                        Choose a clear image containing one handwritten digit
+                        from 0 to 9.
+                    </p>
+
+                </li>
+
+                <li class="card step">
+
+                    <span class="num">2</span>
+
+                    <h3>CNN analysis</h3>
+
+                    <p>
+                        Your trained convolutional neural network analyzes
+                        the image to identify visual patterns.
+                    </p>
+
+                </li>
+
+                <li class="card step">
+
+                    <span class="num">3</span>
+
+                    <h3>Get prediction</h3>
+
+                    <p>
+                        View the predicted digit, the model's confidence,
+                        and the top alternative predictions.
+                    </p>
+
+                </li>
+
+            </ol>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>DigitVision AI · Built with PyTorch, CNN &amp; FastAPI</p>
+    </footer>
+
+    <!-- Keep your existing JavaScript -->
+    <script src="/static/script.js" defer></script>
+
+</body>
+</html>
