@@ -2,7 +2,7 @@
   'use strict';
 
   // The FastAPI endpoint. Change the port here if your server runs elsewhere.
-  const API_URL = 'http://127.0.0.1:8000/api/predict';
+  const API_URL = '/api/predict';
   const MAX_BYTES = 8 * 1024 * 1024;
   const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'];
   const ALLOWED_EXT = ['png', 'jpg', 'jpeg', 'webp', 'bmp'];
